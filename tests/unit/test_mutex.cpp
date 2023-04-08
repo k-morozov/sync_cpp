@@ -33,6 +33,17 @@ TEST_F(TestMutex, lock_unlock_twice) {
 	m.unlock();
 }
 
+TEST_F(TestMutex, lock_unlock_2_mutex) {
+	sync_cpp::Mutex m1;
+	sync_cpp::Mutex m2;
+
+	m1.lock();
+	m2.lock();
+
+	m2.unlock();
+	m1.unlock();
+}
+
 TEST_F(TestMutex, mutual_exclusion) {
 	sync_cpp::Mutex m;
 	int value = 100;

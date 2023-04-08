@@ -62,3 +62,35 @@ TEST_F(TestMutex, dead_after_unlock) {
 	event->wait();
 	delete event;
 }
+
+TEST_F(TestMutex, run_some_threads) {
+	sync_cpp::Mutex m;
+	int value = 0;
+	{
+		std::jthread th1([&m, &value] {
+			std::lock_guard lock(m);
+			value++;
+		});
+		std::jthread th2([&m, &value] {
+			std::lock_guard lock(m);
+			value++;
+		});
+		std::jthread th3([&m, &value] {
+			std::lock_guard lock(m);
+			value++;
+		});
+		std::jthread th4([&m, &value] {
+			std::lock_guard lock(m);
+			value--;
+		});
+		std::jthread th5([&m, &value] {
+			std::lock_guard lock(m);
+			value--;
+		});
+		std::jthread th6([&m, &value] {
+			std::lock_guard lock(m);
+			value++;
+		});
+	}
+	ASSERT_EQ(value, 2);
+}

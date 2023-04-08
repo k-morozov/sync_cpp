@@ -31,11 +31,12 @@ public:
 				|| cas(State::Lock, State::Waiters) == State::Lock) {
 				sys_waiter::futex_wait(cast_to_uint(), State::Waiters);
 			}
-		} while ((old_state=cas(State::Lock, State::Waiters)) != State::Free);
+		} while ((old_state=cas(State::Free, State::Waiters)) != State::Free);
 	}
 
 	void unlock() {
 		if (unlock_with_contention() == State::Waiters) {
+			// @TODO is it normal to work with dead state_?
 			sys_waiter::futex_wake(cast_to_uint(), 1);
 		}
 	}

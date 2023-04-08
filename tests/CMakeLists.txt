@@ -4,7 +4,7 @@ include_directories(${CONAN_INCLUDE_DIRS_GTEST})
 include_directories(${CONAN_INCLUDE_DIRS_BENCHMARK})
 
 set(TEST_APP_NAME unit_test_sync)
-set(BENCHMARK_APP_NAME benchmark_sync)
+#set(BENCHMARK_APP_NAME benchmark_sync)
 
 add_executable(${TEST_APP_NAME}
         unit/main.cpp

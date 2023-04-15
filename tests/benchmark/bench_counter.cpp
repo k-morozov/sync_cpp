@@ -11,7 +11,7 @@
 #include "counter/shards_counter.h"
 #include <common/runner.h>
 
-static constexpr size_t CountThreads = 8;
+static constexpr size_t CountThreads = 16;
 static constexpr size_t CountIncrement = 100'000;
 
 

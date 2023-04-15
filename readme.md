@@ -1,6 +1,12 @@
 [![CMake](https://github.com/k-morozov/sync_cpp/actions/workflows/cmake.yaml/badge.svg)](https://github.com/k-morozov/sync_cpp/actions/workflows/cmake.yaml)
 ## sync cpp library
 
+- mutex
+- condition_variable
+- go channels (buffered and unbuffered)
+- mpms queue
+- atomic counter
+
 #### Required:
 - g++-12
 - Conan 1.59.0

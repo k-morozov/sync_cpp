@@ -21,7 +21,7 @@ class BufferedExecutor final {
 public:
 	explicit BufferedExecutor(const size_t senders_count,
 							  const size_t receivers_count,
-							  const int buffer_size) :
+							  const size_t buffer_size) :
 			chan_(buffer_size),
 			senders_count_(senders_count),
 			receivers_count_(receivers_count),
@@ -58,7 +58,7 @@ private:
 	const size_t senders_count_;
 	const size_t receivers_count_;
 
-	std::atomic<int> free_buffer_slots_;
+	std::atomic<size_t> free_buffer_slots_;
 
 	std::mutex m_;
 	std::atomic<bool> closed_ = false;
@@ -66,7 +66,13 @@ private:
 
 private:
 	static std::vector<T> Join(const std::vector<std::vector<T>> & values) {
-		auto all = std::views::join(values);
+		std::vector<T> all;
+		for (const auto & value : values) {
+			for (const auto & v : value) {
+				all.push_back(v);
+			}
+		}
+//		auto all = std::views::join(values);
 		return {all.begin(), all.end()};
 	}
 

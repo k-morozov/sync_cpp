@@ -15,6 +15,12 @@ add_library(Sync
         queue/mpmc.h
 )
 
+target_link_libraries(Sync
+        atomic
+        project_sanitizers
+        project_warnings
+)
+
 target_include_directories(Sync PUBLIC "${CMAKE_CURRENT_SOURCE_DIR}")
 
 set_target_properties(Sync PROPERTIES LINKER_LANGUAGE CXX)

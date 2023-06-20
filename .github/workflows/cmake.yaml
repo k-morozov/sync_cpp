@@ -4,5 +4,7 @@ on:
   push:
 
 jobs:
-  ubuntu:
+  lockfree_stack_counting:
+    uses: ./.github/workflows/stack_counting.yaml
+  sync:
     uses: ./.github/workflows/sync.yaml

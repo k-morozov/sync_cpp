@@ -114,26 +114,26 @@ void StressEnqueueDequeue(Q & queue, uint32_t num_producers, uint32_t num_consum
 
 template<typename Q>
 void CorrectnessEnqueueDequeue(Q & queue, uint32_t num_producers, uint32_t num_consumers, bool log = true) {
-	std::vector<std::atomic<int>> enqueued(num_producers);
-	std::vector<std::atomic<int>> dequeued(num_producers);
+	std::vector<std::atomic<size_t>> enqueued(num_producers);
+	std::vector<std::atomic<size_t>> dequeued(num_producers);
 	test_space::TimeRunner prod_runner{1s};
 	for (auto i = 0u; i < num_producers; ++i) {
-		auto c = std::make_shared<int>(0);
+		auto c = std::make_shared<size_t>(0);
 		auto func = [&, i, c] { *c += queue.Enqueue(i); };
 		auto on_exit = [&, i, c] { enqueued[i] = *c; };
 		prod_runner.Do(test_space::TaskWithExit{std::move(func), std::move(on_exit)});
 	}
 	test_space::TimeRunner cons_runner{1s};
 	for (auto i = 0u; i < num_consumers; ++i) {
-		auto counters = std::make_shared<std::vector<int>>(num_producers);
+		auto counters = std::make_shared<std::vector<size_t>>(num_producers);
 		auto func = [&, counters, &c = *counters] {
 			if (int value; queue.Dequeue(value)) {
-				++c[value];
+				++c[static_cast<unsigned long>(value)];
 			}
 		};
 		auto on_exit = [&, counters, &c = *counters] {
 			for (auto i = 0u; i < num_producers; ++i) {
-				dequeued[i] += c[i];
+				dequeued[i] += static_cast<unsigned long>(c[i]);
 			}
 		};
 		cons_runner.Do(test_space::TaskWithExit{std::move(func), std::move(on_exit)});

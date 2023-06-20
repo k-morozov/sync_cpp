@@ -3,14 +3,23 @@ project(sync-cpp)
 
 set(CMAKE_CXX_STANDARD 20)
 
+option(CHECK_ADDRESS "check address" ON)
+
 if (CMAKE_BUILD_TYPE STREQUAL "Debug")
     # https://gcc.gnu.org/onlinedocs/libstdc++/manual/using_macros.html
     add_compile_options(-D_GLIBCXX_ASSERTIONS -D_GLIBCXX_DEBUG -D_GLIBCXX_DEBUG_PEDANTIC -D_LIBCPP_DEBUG=1)
 
     add_compile_options(-O0)
 
-    add_compile_options(-fsanitize=thread)
-    add_link_options(-fsanitize=thread)
+    if(CHECK_ADDRESS)
+        message("Check with address sanitize")
+        add_compile_options(-fsanitize=address)
+        add_link_options(-fsanitize=address)
+    else()
+        message("Check with thread sanitize")
+        add_compile_options(-fsanitize=thread)
+        add_link_options(-fsanitize=thread)
+    endif ()
 endif()
 
 if (CMAKE_BUILD_TYPE STREQUAL "Release")

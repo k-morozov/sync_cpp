@@ -10,7 +10,7 @@ env:
   GCC_12: g++-12
 
 jobs:
-  ubuntu-gcc-12-debug:
+  ubuntu-gcc-12-debug-address-sanitize:
     timeout-minutes: 10
     runs-on: ubuntu-latest
     steps:
@@ -28,6 +28,30 @@ jobs:
       - run: |
           mkdir -p ${{github.workspace}}/build
           cmake -B ${{github.workspace}}/build -DCMAKE_CXX_COMPILER=/bin/${{env.GCC_12}} -DCMAKE_BUILD_TYPE=${{env.BUILD_TYPE_DEBUG}}
+          cmake --build ${{github.workspace}}/build --config ${{env.BUILD_TYPE_DEBUG}} --target Sync -- -j 2
+          cmake --build ${{github.workspace}}/build --config ${{env.BUILD_TYPE_DEBUG}} --target unit_test_sync -- -j 2
+      - run: ${{github.workspace}}/build/bin/unit_test_sync
+          --gtest_shuffle
+          --gtest_color=yes
+
+  ubuntu-gcc-12-debug-thread-sanitize:
+    timeout-minutes: 10
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          submodules: true
+      - run: sudo apt-get update
+      - run: sudo apt-get install -y ${{env.GCC_12}}
+      - run: pip install conan==1.59.0
+      - run: conan profile new default --detect
+      - run: conan profile update settings.compiler.libcxx=libstdc++11 default
+      - run: conan profile update settings.compiler.version=12.1 default
+      - run: conan profile update settings.build_type=${{env.BUILD_TYPE_DEBUG}} default
+      - run: conan install --build missing -if ${{github.workspace}}/build .
+      - run: |
+          mkdir -p ${{github.workspace}}/build
+          cmake -B ${{github.workspace}}/build -DCMAKE_CXX_COMPILER=/bin/${{env.GCC_12}} -DCMAKE_BUILD_TYPE=${{env.BUILD_TYPE_DEBUG}} -DCHECK_ADDRESS=OFF
           cmake --build ${{github.workspace}}/build --config ${{env.BUILD_TYPE_DEBUG}} --target Sync -- -j 2
           cmake --build ${{github.workspace}}/build --config ${{env.BUILD_TYPE_DEBUG}} --target unit_test_sync -- -j 2
       - run: ${{github.workspace}}/build/bin/unit_test_sync

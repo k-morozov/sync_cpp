@@ -57,7 +57,13 @@ private:
 
 private:
 	static std::vector<T> Join(const std::vector<std::vector<T>> & values) {
-		auto all = std::views::join(values);
+//		auto all = std::views::join(values);
+		std::vector<T> all;
+		for (const auto & value : values) {
+			for (const auto & v : value) {
+				all.push_back(v);
+			}
+		}
 		return {all.begin(), all.end()};
 	}
 
@@ -66,8 +72,11 @@ private:
 		auto all_senders = Join(senders);
 		auto all_receivers = Join(receivers);
 
-		std::ranges::sort(all_senders);
-		std::ranges::sort(all_receivers);
+//		std::ranges::sort(all_senders);
+//		std::ranges::sort(all_receivers);
+
+		std::sort(all_senders.begin(), all_senders.end());
+		std::sort(all_receivers.begin(), all_receivers.end());
 
 		ASSERT_TRUE(!all_senders.empty());
 		ASSERT_TRUE(all_senders.size() == all_receivers.size()) << " senders="

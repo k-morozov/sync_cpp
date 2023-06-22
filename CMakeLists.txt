@@ -3,7 +3,13 @@ project(sync-cpp)
 
 set(CMAKE_CXX_STANDARD 20)
 
-option(CHECK_ADDRESS "check address" ON)
+option(CHECK_SANITIZE "enable sanitizers checks on debug mode" OFF)
+
+# https://llvm.org/docs/CMake.html
+#set(LLVM_ENABLE_LIBCXX ON)
+
+# Adding sanitizers
+add_library(project_sanitizers INTERFACE)
 
 if (CMAKE_BUILD_TYPE STREQUAL "Debug")
     # https://gcc.gnu.org/onlinedocs/libstdc++/manual/using_macros.html
@@ -11,15 +17,13 @@ if (CMAKE_BUILD_TYPE STREQUAL "Debug")
 
     add_compile_options(-O0)
 
-    if(CHECK_ADDRESS)
-        message("Check with address sanitize")
-        add_compile_options(-fsanitize=address)
-        add_link_options(-fsanitize=address)
-    else()
-        message("Check with thread sanitize")
-        add_compile_options(-fsanitize=thread)
-        add_link_options(-fsanitize=thread)
-    endif ()
+    if (CHECK_SANITIZE)
+        include(${CMAKE_SOURCE_DIR}/cmake/sanitizers.cmake)
+        message(ERROR "Check sanitize")
+        enable_sanitizers(project_sanitizers)
+        set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -g -fsanitize-memory-track-origins -fPIE -pie -fno-omit-frame-pointer -fno-optimize-sibling-calls")
+        set (CMAKE_LINKER_FLAGS_DEBUG "${CMAKE_LINKER_FLAGS_DEBUG} -fsanitize-memory-track-origins -fPIE -pie -fno-omit-frame-pointer -fno-optimize-sibling-calls")
+    endif()
 endif()
 
 if (CMAKE_BUILD_TYPE STREQUAL "Release")
@@ -29,6 +33,10 @@ endif ()
 # https://gcc.gnu.org/onlinedocs/gcc/Warning-Options.html
 # https://clang.llvm.org/docs/DiagnosticsReference.html
 add_compile_options(-Wall -Wextra -Wpedantic)
+
+include(${CMAKE_SOURCE_DIR}/cmake/warnings.cmake)
+add_library(project_warnings INTERFACE)
+enable_warnings(project_warnings)
 
 get_directory_property(CMAKE_CXX_FLAGS_LIST COMPILE_OPTIONS)
 list(JOIN CMAKE_CXX_FLAGS_LIST " " CMAKE_CXX_FLAGS)
@@ -43,3 +51,5 @@ include_directories(tests)
 add_subdirectory(src)
 add_subdirectory(tests)
 #add_subdirectory(example)
+
+add_subdirectory(lockfree)

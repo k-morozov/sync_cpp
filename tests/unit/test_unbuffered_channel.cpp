@@ -35,7 +35,7 @@ TEST_F(UnbufferedChannel, just_simple_copy) {
 }
 
 TEST_F(UnbufferedChannel, simple_run) {
-	UnbufferedExecutor<int> ex(1, 1);
+	UnbufferedExecutor<size_t> ex(1, 1);
 	ex();
 }
 

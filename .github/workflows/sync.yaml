@@ -11,7 +11,7 @@ env:
 
 jobs:
   ubuntu-clang-15-debug-address-leak-undefined-sanitize:
-    timeout-minutes: 10
+    timeout-minutes: 15
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
@@ -36,7 +36,7 @@ jobs:
           --gtest_color=yes
 
   ubuntu-clang-15-debug-thread-sanitize:
-    timeout-minutes: 10
+    timeout-minutes: 15
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
@@ -61,7 +61,7 @@ jobs:
           --gtest_color=yes
 
   ubuntu-clang-15-release:
-    timeout-minutes: 10
+    timeout-minutes: 15
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2

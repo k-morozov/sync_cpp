@@ -16,21 +16,21 @@ TEST_F(TestLockFreeStackHazard, push_pop) {
 	sync_cpp::LockFreeStackHazard<int> stack;
 
 	stack.Push(117);
-	auto item = stack.Pop();
+	auto item = stack.TryPop();
 	ASSERT_TRUE(item);
 	ASSERT_EQ(*item, 117);
 
-	auto empty = stack.Pop();
+	auto empty = stack.TryPop();
 	ASSERT_FALSE(empty);
 }
 
 TEST_F(TestLockFreeStackHazard, only_pop) {
 	sync_cpp::LockFreeStackHazard<std::string> stack;
 
-	auto empty = stack.Pop();
+	auto empty = stack.TryPop();
 	ASSERT_FALSE(empty);
 
-	empty = stack.Pop();
+	empty = stack.TryPop();
 	ASSERT_FALSE(empty);
 }
 
@@ -38,22 +38,22 @@ TEST_F(TestLockFreeStackHazard, push_some_pop_push) {
 	sync_cpp::LockFreeStackHazard<std::string> stack;
 
 	stack.Push("Data");
-	auto item = stack.Pop();
+	auto item = stack.TryPop();
 	ASSERT_TRUE(item);
 	ASSERT_EQ(*item, "Data");
 
-	auto empty = stack.Pop();
+	auto empty = stack.TryPop();
 	ASSERT_FALSE(empty);
 
-	empty = stack.Pop();
+	empty = stack.TryPop();
 	ASSERT_FALSE(empty);
 
 	stack.Push("Data");
-	item = stack.Pop();
+	item = stack.TryPop();
 	ASSERT_TRUE(item);
 	ASSERT_EQ(*item, "Data");
 
-	empty = stack.Pop();
+	empty = stack.TryPop();
 	ASSERT_FALSE(empty);
 }
 
@@ -64,11 +64,11 @@ TEST_F(TestLockFreeStackHazard, LIFO) {
 	stack.Push(2);
 	stack.Push(3);
 
-	ASSERT_EQ(*stack.Pop(), 3);
-	ASSERT_EQ(*stack.Pop(), 2);
-	ASSERT_EQ(*stack.Pop(), 1);
+	ASSERT_EQ(*stack.TryPop(), 3);
+	ASSERT_EQ(*stack.TryPop(), 2);
+	ASSERT_EQ(*stack.TryPop(), 1);
 
-	ASSERT_FALSE(stack.Pop());
+	ASSERT_FALSE(stack.TryPop());
 }
 
 TEST_F(TestLockFreeStackHazard, Dtor) {
@@ -84,8 +84,8 @@ TEST_F(TestLockFreeStackHazard, 2_stacks) {
 
 	stack_1.Push(3);
 	stack_2.Push(11);
-	ASSERT_EQ(*stack_1.Pop(), 3);
-	ASSERT_EQ(*stack_2.Pop(), 11);
+	ASSERT_EQ(*stack_1.TryPop(), 3);
+	ASSERT_EQ(*stack_2.TryPop(), 11);
 }
 
 TEST_F(TestLockFreeStackHazard, 2_threads_push) {
@@ -106,7 +106,7 @@ TEST_F(TestLockFreeStackHazard, 2_threads_push) {
 	result.reserve(20'000);
 	size_t counter = 0;
 	while(true) {
-		auto data = stack.Pop();
+		auto data = stack.TryPop();
 		if (!data) {
 			continue;
 		}
@@ -140,7 +140,7 @@ TEST_F(TestLockFreeStackHazard, 2_threads_pop) {
 
 	auto th1_pop = std::jthread([&] {
 		while(counter < 20'000) {
-			auto data = stack.Pop();
+			auto data = stack.TryPop();
 			if (!data) {
 				continue;
 			}
@@ -152,7 +152,7 @@ TEST_F(TestLockFreeStackHazard, 2_threads_pop) {
 
 	auto th2_pop = std::jthread([&] {
 		while(counter < 20'000) {
-			auto data = stack.Pop();
+			auto data = stack.TryPop();
 			if (!data) {
 				continue;
 			}

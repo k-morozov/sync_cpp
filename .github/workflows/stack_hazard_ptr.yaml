@@ -55,7 +55,7 @@ jobs:
           cmake -B ${{github.workspace}}/build -DCMAKE_CXX_COMPILER=/bin/${{env.CLANG_15}} -DCMAKE_BUILD_TYPE=${{env.BUILD_TYPE_DEBUG}} \
             -DCHECK_SANITIZE=ON -DENABLE_SANITIZER_THREAD=True
           cmake --build ${{github.workspace}}/build --config ${{env.BUILD_TYPE_DEBUG}} --target stack_hazard -- -j 2
-          cmake --build ${{github.workspace}}/build --config ${{env.BUILD_TYPE_DEBUG}} --target unit_test_hazard_counting -- -j 2
+          cmake --build ${{github.workspace}}/build --config ${{env.BUILD_TYPE_DEBUG}} --target unit_test_stack_hazard -- -j 2
       - run: ${{github.workspace}}/build/bin/unit_test_stack_hazard
           --gtest_shuffle
           --gtest_color=yes

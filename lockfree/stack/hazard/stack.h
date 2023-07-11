@@ -36,7 +36,11 @@ class LockFreeStackHazard final : private Reclaim {
                     hp.store(old_head);
                     old_head = head_.load();
                 } while (old_head != temp);
+                // hp sets to head
+
             } while (old_head && !head_.compare_exchange_strong(old_head, old_head->next));
+
+            // clean hp
             hp.store(nullptr);
 
             std::shared_ptr<T> res;

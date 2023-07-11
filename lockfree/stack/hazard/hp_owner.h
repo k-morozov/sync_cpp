@@ -21,7 +21,6 @@ void do_delete(void* p) {
     delete static_cast<T*>(p);
 }
 
-
 class hp_owner {
     public:
         hp_owner() : hp(nullptr) {

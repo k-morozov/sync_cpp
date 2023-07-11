@@ -21,7 +21,7 @@ jobs:
         uses: actions/cache@v2
         with:
           path: ~/.conan/data
-          key: ${{ runner.os }}-conan-${{ hashFiles('conanfile.txt') }}-sync-address
+          key: ${{ runner.os }}-conan-${{ hashFiles('conanfile.txt') }}-stack-hazard-address
       - run: |
           export BUILD_TYPE=${{env.BUILD_TYPE_DEBUG}}
           ./tools/install_deps.sh
@@ -29,9 +29,9 @@ jobs:
           mkdir -p ${{github.workspace}}/build
           cmake -B ${{github.workspace}}/build -DCMAKE_CXX_COMPILER=/bin/${{env.CLANG_15}} -DCMAKE_BUILD_TYPE=${{env.BUILD_TYPE_DEBUG}} \
             -DCHECK_SANITIZE=ON -DENABLE_SANITIZER_ADDRESS=True -DENABLE_SANITIZER_LEAK=True -DENABLE_SANITIZER_UNDEFINED_BEHAVIOR=True
-          cmake --build ${{github.workspace}}/build --config ${{env.BUILD_TYPE_DEBUG}} --target Sync -- -j 2
-          cmake --build ${{github.workspace}}/build --config ${{env.BUILD_TYPE_DEBUG}} --target unit_test_sync -- -j 2
-      - run: ${{github.workspace}}/build/bin/unit_test_sync
+          cmake --build ${{github.workspace}}/build --config ${{env.BUILD_TYPE_DEBUG}} --target stack_hazard -- -j 2
+          cmake --build ${{github.workspace}}/build --config ${{env.BUILD_TYPE_DEBUG}} --target unit_test_stack_hazard -- -j 2
+      - run: ${{github.workspace}}/build/bin/unit_test_stack_hazard
           --gtest_shuffle
           --gtest_color=yes
 
@@ -46,7 +46,7 @@ jobs:
         uses: actions/cache@v2
         with:
           path: ~/.conan/data
-          key: ${{ runner.os }}-conan-${{ hashFiles('conanfile.txt') }}-sync-thread
+          key: ${{ runner.os }}-conan-${{ hashFiles('conanfile.txt') }}-stack-hazard-thread
       - run: |
           export BUILD_TYPE=${{env.BUILD_TYPE_DEBUG}}
           ./tools/install_deps.sh
@@ -54,9 +54,9 @@ jobs:
           mkdir -p ${{github.workspace}}/build
           cmake -B ${{github.workspace}}/build -DCMAKE_CXX_COMPILER=/bin/${{env.CLANG_15}} -DCMAKE_BUILD_TYPE=${{env.BUILD_TYPE_DEBUG}} \
             -DCHECK_SANITIZE=ON -DENABLE_SANITIZER_THREAD=True
-          cmake --build ${{github.workspace}}/build --config ${{env.BUILD_TYPE_DEBUG}} --target Sync -- -j 2
-          cmake --build ${{github.workspace}}/build --config ${{env.BUILD_TYPE_DEBUG}} --target unit_test_sync -- -j 2
-      - run: ${{github.workspace}}/build/bin/unit_test_sync
+          cmake --build ${{github.workspace}}/build --config ${{env.BUILD_TYPE_DEBUG}} --target stack_hazard -- -j 2
+          cmake --build ${{github.workspace}}/build --config ${{env.BUILD_TYPE_DEBUG}} --target unit_test_stack_hazard -- -j 2
+      - run: ${{github.workspace}}/build/bin/unit_test_stack_hazard
           --gtest_shuffle
           --gtest_color=yes
 
@@ -71,17 +71,17 @@ jobs:
         uses: actions/cache@v2
         with:
           path: ~/.conan/data
-          key: ${{ runner.os }}-conan-${{ hashFiles('conanfile.txt') }}-sync-release
+          key: ${{ runner.os }}-conan-${{ hashFiles('conanfile.txt') }}-stack-hazard-release
       - run: |
           export BUILD_TYPE=${{env.BUILD_TYPE_RELEASE}}
           ./tools/install_deps.sh
       - run: |
           mkdir -p ${{github.workspace}}/build
           cmake -B ${{github.workspace}}/build -DCMAKE_CXX_COMPILER=/bin/${{env.CLANG_15}} -DCMAKE_BUILD_TYPE=${{env.BUILD_TYPE_RELEASE}}
-          cmake --build ${{github.workspace}}/build --config ${{env.BUILD_TYPE_RELEASE}} --target Sync -- -j 2
-          cmake --build ${{github.workspace}}/build --config ${{env.BUILD_TYPE_RELEASE}} --target unit_test_sync -- -j 2
-#          cmake --build ${{github.workspace}}/build --config ${{env.BUILD_TYPE_RELEASE}} --target benchmark_sync -- -j 2
-      - run: ${{github.workspace}}/build/bin/unit_test_sync
+          cmake --build ${{github.workspace}}/build --config ${{env.BUILD_TYPE_RELEASE}} --target stack_hazard -- -j 2
+          cmake --build ${{github.workspace}}/build --config ${{env.BUILD_TYPE_RELEASE}} --target unit_test_stack_hazard -- -j 2
+#          cmake --build ${{github.workspace}}/build --config ${{env.BUILD_TYPE_RELEASE}} --target benchmark_stack_counting -- -j 2
+      - run: ${{github.workspace}}/build/bin/unit_test_stack_hazard
           --gtest_shuffle
           --gtest_color=yes
 #      - run: ${{github.workspace}}/build/bin/benchmark_sync

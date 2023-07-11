@@ -8,7 +8,7 @@
 - atomic counter
 
 #### Required:
-- g++-12
+- clang++-15
 - Conan 1.59.0
 
 ### Channels:
@@ -23,3 +23,7 @@
 |------------------------------|----------|--------|------------|
 | simple_counter/iterations:10 | 21221 us | 352 us | 10         |
 | shards_counter/iterations:10 | 4953 us  | 247 us | 10         |
+
+### lockfree
+- stack with counter
+- stack with hazard pointers

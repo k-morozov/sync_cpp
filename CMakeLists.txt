@@ -42,6 +42,8 @@ get_directory_property(CMAKE_CXX_FLAGS_LIST COMPILE_OPTIONS)
 list(JOIN CMAKE_CXX_FLAGS_LIST " " CMAKE_CXX_FLAGS)
 message("Compiler flags: ${CMAKE_CXX_FLAGS}")
 
+set(ENV{PYTHONPATH} "${CMAKE_CURRENT_SOURCE_DIR}/env/bin/python")
+
 include(${CMAKE_BINARY_DIR}/conanbuildinfo.cmake)
 conan_basic_setup()
 

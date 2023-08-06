@@ -4,13 +4,12 @@
 
 #include <iostream>
 
-#include <channel.h>
+#include <atomic>
 
 int main() {
-	sync_cpp::buffered_mpmc_channel<int> chan(2);
-	chan << 17;
+	std::atomic<int> a{10};
+	int b = 10;
 
-	std::optional<int> value;
-	chan >> value;
-	std::cout << value.value_or(-1) << std::endl;
+	a.compare_exchange_weak(b, 2);
+	std::cout << a << std::endl;
 }

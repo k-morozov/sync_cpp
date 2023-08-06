@@ -13,5 +13,5 @@ conan profile update settings.compiler.libcxx=libstdc++11 default
 conan profile update settings.compiler=clang default
 conan profile update settings.compiler.version=15 default
 conan profile update settings.build_type=$BUILD_TYPE default
-conan install --build missing -if ./build .
+#conan install --build missing -if ./build . -o gtest:asan=True
 conan profile show default

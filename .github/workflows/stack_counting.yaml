@@ -25,6 +25,7 @@ jobs:
       - run: |
           export BUILD_TYPE=${{env.BUILD_TYPE_DEBUG}}
           ./tools/install_deps.sh
+          conan install --build missing -if ./build . -o gtest:asan=True
       - run: |
           mkdir -p ${{github.workspace}}/build
           cmake -B ${{github.workspace}}/build -DCMAKE_CXX_COMPILER=/bin/${{env.CLANG_15}} -DCMAKE_BUILD_TYPE=${{env.BUILD_TYPE_DEBUG}} \
@@ -50,6 +51,7 @@ jobs:
       - run: |
           export BUILD_TYPE=${{env.BUILD_TYPE_DEBUG}}
           ./tools/install_deps.sh
+          conan install --build missing -if ./build .
       - run: |
           mkdir -p ${{github.workspace}}/build
           cmake -B ${{github.workspace}}/build -DCMAKE_CXX_COMPILER=/bin/${{env.CLANG_15}} -DCMAKE_BUILD_TYPE=${{env.BUILD_TYPE_DEBUG}} \

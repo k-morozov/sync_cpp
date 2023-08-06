@@ -1,3 +1,17 @@
+#cmake_minimum_required(VERSION 3.15)
+#project(sync CXX)
+#
+#
+#
+#
+#add_library(sync src/sync.cpp)
+#target_include_directories(sync PUBLIC include)
+#
+#
+#
+#set_target_properties(sync PROPERTIES PUBLIC_HEADER "include/sync.h")
+#install(TARGETS sync)
+
 cmake_minimum_required(VERSION 3.25)
 project(sync-cpp)
 
@@ -47,11 +61,11 @@ set(ENV{PYTHONPATH} "${CMAKE_CURRENT_SOURCE_DIR}/env/bin/python")
 include(${CMAKE_BINARY_DIR}/conanbuildinfo.cmake)
 conan_basic_setup()
 
-include_directories(src)
-include_directories(tests)
-
-add_subdirectory(src)
-add_subdirectory(tests)
+#include_directories(src)
+#include_directories(tests)
+#
+#add_subdirectory(src)
+#add_subdirectory(tests)
 #add_subdirectory(example)
 
 add_subdirectory(lockfree)

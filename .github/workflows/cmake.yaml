@@ -6,7 +6,7 @@ on:
 jobs:
   lockfree_stack_counting:
     uses: ./.github/workflows/stack_counting.yaml
-  lockfree_stack_hazard:
-    uses: ./.github/workflows/stack_hazard_ptr.yaml
+#  lockfree_stack_hazard:
+#    uses: ./.github/workflows/stack_hazard_ptr.yaml
 #  sync:
 #    uses: ./.github/workflows/sync.yaml

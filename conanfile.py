@@ -1,21 +1,45 @@
-from conans import ConanFile, CMake
+from conan import ConanFile
+from conan.tools.cmake import CMakeToolchain, CMake, cmake_layout, CMakeDeps
 
-class YourProjectConan(ConanFile):
-    name = "your_project"
-    version = "1.0"
+
+class syncRecipe(ConanFile):
+    name = "sync"
+    version = "0.1"
+    package_type = "library"
+
+    # Optional metadata
+    license = "<Put the package license here>"
+    author = "<Put your name here> <And your email here>"
+    url = "<Package recipe repository url here, for issues about the package>"
+    description = "<Description of sync package here>"
+    topics = ("<Put some tag here>", "<here>", "<and here>")
+
+    # Binary configuration
     settings = "os", "compiler", "build_type", "arch"
-    options = {"asan": [True, False], "ubsan": [True, False]}
-    default_options = {"asan": False, "ubsan": False}
-    generators = "cmake"
+    options = {"shared": [True, False], "fPIC": [True, False]}
+    default_options = {"shared": False, "fPIC": True}
 
-    # Указываем конкретную версию Google Test
-    requires = "gtest/1.11.0"
+    # Sources are located in the same place as this recipe, copy them to the recipe
+    exports_sources = "CMakeLists.txt", "src/*", "include/*"
+
+    requires = "gtest/1.14.0"
+
+    def config_options(self):
+        if self.settings.os == "Windows":
+            self.options.rm_safe("fPIC")
 
     def configure(self):
-        if self.settings.compiler == "clang":
-            if self.settings.build_type == "Debug":
-                self.options["gtest"].asan = True  # Включаем ASan для Debug-сборки
-                self.options["gtest"].ubsan = True  # Включаем UBSan для Release-сборки
+        if self.options.shared:
+            self.options.rm_safe("fPIC")
+
+    def layout(self):
+        cmake_layout(self)
+
+    def generate(self):
+        deps = CMakeDeps(self)
+        deps.generate()
+        tc = CMakeToolchain(self)
+        tc.generate()
 
     def build(self):
         cmake = CMake(self)
@@ -25,3 +49,11 @@ class YourProjectConan(ConanFile):
     def package(self):
         cmake = CMake(self)
         cmake.install()
+
+    def package_info(self):
+        self.cpp_info.libs = ["sync"]
+
+    
+
+    
+

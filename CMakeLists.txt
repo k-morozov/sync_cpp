@@ -55,3 +55,4 @@ add_subdirectory(tests)
 #add_subdirectory(example)
 
 add_subdirectory(lockfree)
+add_subdirectory(primitives)

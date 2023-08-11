@@ -9,7 +9,7 @@
 
 #include "spinlock.h"
 
-static constexpr size_t CountThreads = 64;
+static constexpr size_t CountThreads = 8;
 static constexpr size_t CountIncrement = 100'000;
 
 

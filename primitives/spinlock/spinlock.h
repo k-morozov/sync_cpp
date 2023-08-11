@@ -39,7 +39,9 @@ class ReadablePolicy {
 protected:
 	void acquire() {
 		while (is_lock_.exchange(true)) {
-			while(is_lock_.load()) {}
+			while(is_lock_.load()) {
+				std::this_thread::yield();
+			}
 		}
 	}
 
@@ -55,7 +57,9 @@ class MMReadablePolicy {
 protected:
 	void acquire() {
 		while (is_lock_.exchange(true, std::memory_order_acquire)) {
-			while(is_lock_.load(std::memory_order_relaxed)) {}
+			while(is_lock_.load(std::memory_order_relaxed)) {
+				std::this_thread::yield();
+			}
 		}
 	}
 

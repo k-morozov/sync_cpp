@@ -34,7 +34,7 @@ public:
 		}
 
 		void set_owner() {
-			is_owner_.store(true);
+			is_owner_.store(true, std::memory_order_release);
 		}
 
 		bool has_next() {
@@ -42,11 +42,11 @@ public:
 		}
 
 		void set_next_owner() {
-			(*next_).set_owner();
+			next_.load()->set_owner();
 		}
 
 		bool is_owner() {
-			return is_owner_.load();
+			return is_owner_.load(std::memory_order_acquire);
 		}
 	};
 

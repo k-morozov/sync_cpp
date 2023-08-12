@@ -10,7 +10,7 @@
 #include "spinlock.h"
 #include "queue_spinlock.h"
 
-static constexpr size_t CountThreads = 8;
+const size_t CountThreads = std::thread::hardware_concurrency();
 static constexpr size_t CountIncrement = 100'000;
 static constexpr size_t CountIteration = 10;
 

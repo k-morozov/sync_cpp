@@ -6,6 +6,7 @@
 
 #include <atomic>
 #include <memory>
+#include <thread>
 
 namespace sync_cpp {
 
@@ -56,7 +57,10 @@ private:
 class MMReadablePolicy {
 protected:
 	void acquire() {
-		while (is_lock_.exchange(true, std::memory_order_acquire)) {
+		while (is_lock_.exchange(true,
+//								 std::memory_order_acquire
+								std::memory_order_acq_rel
+								 )) {
 			while(is_lock_.load(std::memory_order_relaxed)) {
 				std::this_thread::yield();
 			}

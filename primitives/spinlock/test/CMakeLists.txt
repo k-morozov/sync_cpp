@@ -6,8 +6,9 @@ include_directories(${CONAN_INCLUDE_DIRS_BENCHMARK})
 set(TEST_APP_NAME unit_test_spinlock)
 
 add_executable(${TEST_APP_NAME}
-    main.cpp
-    unit-tests.cpp
+        main.cpp
+        test_spinlock.cpp
+        test_queue_spinlock.cpp
 )
 
 target_link_libraries(${TEST_APP_NAME}

@@ -8,9 +8,11 @@
 #include <vector>
 
 #include "spinlock.h"
+#include "queue_spinlock.h"
 
 static constexpr size_t CountThreads = 8;
 static constexpr size_t CountIncrement = 100'000;
+static constexpr size_t CountIteration = 10;
 
 
 static void simple_spinlock(benchmark::State& state) {
@@ -31,7 +33,7 @@ static void simple_spinlock(benchmark::State& state) {
 		}
 	}
 }
-BENCHMARK(simple_spinlock)->Unit(benchmark::kMillisecond)->Iterations(10);
+BENCHMARK(simple_spinlock)->Unit(benchmark::kMillisecond)->Iterations(CountIteration);
 
 static void readable_spinlock(benchmark::State& state) {
 	for (auto _ : state) {
@@ -51,7 +53,7 @@ static void readable_spinlock(benchmark::State& state) {
 		}
 	}
 }
-BENCHMARK(readable_spinlock)->Unit(benchmark::kMillisecond)->Iterations(10);
+BENCHMARK(readable_spinlock)->Unit(benchmark::kMillisecond)->Iterations(CountIteration);
 
 static void mm_readable_spinlock(benchmark::State& state) {
 	for (auto _ : state) {
@@ -71,7 +73,25 @@ static void mm_readable_spinlock(benchmark::State& state) {
 		}
 	}
 }
-BENCHMARK(mm_readable_spinlock)->Unit(benchmark::kMillisecond)->Iterations(10);
+BENCHMARK(mm_readable_spinlock)->Unit(benchmark::kMillisecond)->Iterations(CountIteration);
+
+static void queue_spinlock(benchmark::State& state) {
+	for (auto _ : state) {
+		std::vector<std::jthread> workers;
+		uint64_t counter = UINT64_MAX;
+		sync_cpp::QueueSpinlock spinlock;
+
+		for(size_t i=0; i<CountThreads; i++) {
+			workers.emplace_back([&counter, &spinlock] {
+				for (size_t i=0; i<CountIncrement; i++) {
+					sync_cpp::QueueSpinlock::Guard g(spinlock);
+					counter++;
+				}
+			});
+		}
+	}
+}
+BENCHMARK(queue_spinlock)->Unit(benchmark::kMillisecond)->Iterations(CountIteration);
 
 
 //BENCHMARK_MAIN();

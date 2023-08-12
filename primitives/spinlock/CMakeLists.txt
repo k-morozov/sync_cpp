@@ -5,6 +5,7 @@ set(BENCHMARK_APP_NAME benchmark_spinlock)
 include_directories(.)
 add_library(spinlock
         spinlock.h
+        queue_spinlock.h
 )
 
 target_link_libraries(spinlock
@@ -23,7 +24,7 @@ add_subdirectory(test)
 
 add_executable(${BENCHMARK_APP_NAME}
         bench/main.cpp
-        bench/bench_spinlock.cpp
+        bench/bench.cpp
 )
 
 target_link_libraries(${BENCHMARK_APP_NAME}

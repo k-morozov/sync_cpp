@@ -9,6 +9,7 @@
 #include <thread>
 
 namespace sync_cpp {
+
 class QueueSpinlock final {
 public:
 	class Guard final {
@@ -45,7 +46,7 @@ public:
 		}
 
 		bool is_owner() {
-			return is_owner_.load(std::memory_order_relaxed);
+			return is_owner_.load();
 		}
 	};
 

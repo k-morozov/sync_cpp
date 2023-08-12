@@ -45,7 +45,7 @@ public:
 		}
 
 		bool is_owner() {
-			return is_owner_.load();
+			return is_owner_.load(std::memory_order_relaxed);
 		}
 	};
 
@@ -54,26 +54,22 @@ protected:
 		auto old_tail = tail_.exchange(waiter);
 		if (old_tail != nullptr) {
 			old_tail->set_next(waiter);
-			while (!waiter->is_owner_) {}
+			while (!waiter->is_owner()) {
+				std::this_thread::yield();
+			}
 		} else {
 			waiter->set_owner();
 		}
 	}
 	void Release(Guard* owner) {
-		if (owner->has_next()) {
-			owner->set_next_owner();
-			return;
-		}
-
-		auto self = owner;
-		while(!tail_.compare_exchange_weak(self, nullptr)) {
+		Guard* self;
+		do {
 			if (owner->has_next()) {
 				owner->set_next_owner();
 				return;
 			}
-
 			self = owner;
-		}
+		} while(!tail_.compare_exchange_weak(self, nullptr));
 	}
 
 private:

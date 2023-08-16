@@ -28,7 +28,6 @@ add_executable(${BENCHMARK_APP_NAME}
 )
 
 target_link_libraries(${BENCHMARK_APP_NAME}
-        Sync
         ${CONAN_LIBS_GTEST}
         ${CONAN_LIBS_BENCHMARK}
         )

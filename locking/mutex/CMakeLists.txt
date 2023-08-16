@@ -5,6 +5,7 @@ set(BENCHMARK_APP_NAME benchmark_mutex)
 include_directories(.)
 add_library(mutex
         mutex.h
+        futex_waiter.h
 )
 
 target_link_libraries(spinlock

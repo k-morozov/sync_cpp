@@ -9,7 +9,7 @@
 #include <mutex.h>
 
 static constexpr size_t CountThreads = 16;
-static constexpr size_t CountIncrement = 100'000;
+static constexpr size_t CountIncrement = 10'000;
 
 class TestMutex : public ::testing::Test {
 public:

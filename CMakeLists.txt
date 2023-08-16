@@ -50,7 +50,6 @@ conan_basic_setup()
 include_directories(src)
 include_directories(tests)
 
-add_subdirectory(src)
 add_subdirectory(tests)
 #add_subdirectory(example)
 

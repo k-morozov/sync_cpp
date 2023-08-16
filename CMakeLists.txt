@@ -47,12 +47,5 @@ set(ENV{PYTHONPATH} "${CMAKE_CURRENT_SOURCE_DIR}/env/bin/python")
 include(${CMAKE_BINARY_DIR}/conanbuildinfo.cmake)
 conan_basic_setup()
 
-include_directories(src)
-include_directories(tests)
-
-add_subdirectory(src)
-add_subdirectory(tests)
-#add_subdirectory(example)
-
 add_subdirectory(lockfree)
 add_subdirectory(locking)

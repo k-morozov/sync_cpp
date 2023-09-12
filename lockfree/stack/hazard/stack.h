@@ -54,12 +54,12 @@ class LockFreeStackHazard final : private Reclaim {
             std::shared_ptr<T> res;
             if (old_head) {
                 res.swap(old_head->data);
-                if (OutstandingHazardPtrsFor(old_head)) {
-                    reclaim_later(old_head);
-                } else {
-                    delete old_head;
-                }
-                delete_nodes_with_no_hazard();
+//                if (OutstandingHazardPtrsFor(old_head)) {
+//                    reclaim_later(old_head);
+//                } else {
+//                    delete old_head;
+//                }
+//                delete_nodes_with_no_hazard();
             }
             return res;
         }

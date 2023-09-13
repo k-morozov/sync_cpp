@@ -25,12 +25,12 @@ TEST_F(TestSPSCQueue, push_pop) {
 }
 
 TEST_F(TestSPSCQueue, only_pop) {
-	sync_cpp::SPSCQueue<std::string> stack;
+	sync_cpp::SPSCQueue<std::string> q;
 
-	auto empty = stack.pop();
+	auto empty = q.pop();
 	ASSERT_FALSE(empty);
 
-	empty = stack.pop();
+	empty = q.pop();
 	ASSERT_FALSE(empty);
 }
 

@@ -11,8 +11,8 @@ namespace sync_cpp {
 template<class T>
 class SPSCQueue final {
 	struct Node final {
-		std::shared_ptr<T> data;
-		Node* next;
+		std::shared_ptr<T> data{};
+		Node* next{nullptr};
 	};
 
 	std::atomic<Node*> head_;
@@ -39,7 +39,7 @@ public:
 
 	void push(T new_value) {
 		auto new_data = std::make_shared<T>(std::move(new_value));
-		Node* p = new Node();
+		Node* p = new Node;
 		Node* const old_tail = tail_.load();
 		old_tail->data.swap(new_data);
 		old_tail->next = p;

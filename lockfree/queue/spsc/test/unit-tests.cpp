@@ -12,7 +12,7 @@ class TestSPSCQueue : public ::testing::Test {
 public:
 };
 
-TEST_F(TestSPSCQueue, push_pop) {
+TEST_F(TestSPSCQueue, simple_push_pop) {
 	sync_cpp::SPSCQueue<int> q;
 
 	q.push(117);

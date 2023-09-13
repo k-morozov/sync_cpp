@@ -25,7 +25,7 @@ TEST_F(TestSPSCQueue, simple_push_pop) {
 }
 
 TEST_F(TestSPSCQueue, only_pop) {
-	sync_cpp::SPSCQueue<std::string> q;
+	sync_cpp::SPSCQueue<size_t> q;
 
 	auto empty = q.pop();
 	ASSERT_FALSE(empty);

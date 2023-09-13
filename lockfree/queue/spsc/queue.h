@@ -35,6 +35,7 @@ public:
 	SPSCQueue(SPSCQueue&&) noexcept = delete;
 	~SPSCQueue() {
 		while (pop() != nullptr);
+		delete head_;
 	}
 
 	void push(T new_value) {

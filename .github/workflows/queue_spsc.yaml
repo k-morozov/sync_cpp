@@ -1,7 +1,6 @@
 name: Cmake
 
-on:
-  workflow_call:
+on: [push]
 
 env:
   BUILD_TYPE_DEBUG: Debug

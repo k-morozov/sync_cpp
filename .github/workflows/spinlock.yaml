@@ -1,7 +1,9 @@
 name: Cmake
 
 on:
-  workflow_call:
+  push:
+    branches:
+      - master
 
 env:
   BUILD_TYPE_DEBUG: Debug

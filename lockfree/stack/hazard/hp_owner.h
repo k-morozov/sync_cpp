@@ -5,30 +5,20 @@
 #include <memory>
 #include <thread>
 
+#include "hp.h"
+
 namespace sync_cpp {
 
-static constexpr size_t MaxHazardPointers = 100;
-struct HazardPtr
-{
-    std::atomic<std::thread::id> id;
-    std::atomic<void *> ptr;
-};
-
-HazardPtr hazard_ptrs[MaxHazardPointers];
-
-template<typename T>
-void do_delete(void* p) {
-    delete static_cast<T*>(p);
-}
-
 class hp_owner {
+	HazardPtr* hp;
+
     public:
         hp_owner() : hp(nullptr) {
-            for(size_t i=0; i<MaxHazardPointers; i++) {
+            for(auto & hazard_ptr : hazard_ptrs) {
                 std::thread::id old_id;
 
-                if (hazard_ptrs[i].id.compare_exchange_strong(old_id, std::this_thread::get_id())) {
-                    hp = &hazard_ptrs[i];
+                if (hazard_ptr.id.compare_exchange_strong(old_id, std::this_thread::get_id())) {
+                    hp = &hazard_ptr;
                     break;
                 }
             }
@@ -47,10 +37,6 @@ class hp_owner {
             hp->ptr.store(nullptr);
             hp->id.store(std::this_thread::get_id());
         }
-
-
-    private:
-        HazardPtr* hp;
 };
 
 

@@ -12,3 +12,5 @@ jobs:
     uses: ./.github/workflows/spinlock.yaml
   mutex:
     uses: ./.github/workflows/mutex.yaml
+  queue_spsc:
+    uses: ./.github/workflows/queue_spsc.yaml

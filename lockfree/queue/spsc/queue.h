@@ -34,8 +34,10 @@ public:
 	SPSCQueue(const SPSCQueue&) = delete;
 	SPSCQueue(SPSCQueue&&) noexcept = delete;
 	~SPSCQueue() {
-		while (pop() != nullptr);
-		delete head_;
+		while (auto* const old_head = head_.load()) {
+			head_ = old_head->next;
+			delete old_head;
+		}
 	}
 
 	void push(T new_value) {
